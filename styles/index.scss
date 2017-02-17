@@ -1,0 +1,34 @@
+$grid-size: 45px;
+
+#test {
+  color: red;
+}
+
+.square {
+  background: #fff;
+  margin-top: -1px;
+  margin-right: -1px;
+
+  border: 1px solid #000000;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: $grid-size;
+  float: left;
+
+  padding: 0;
+  text-align: center;
+
+  height: $grid-size;
+  width: $grid-size;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
