@@ -2,13 +2,15 @@ import React from 'react';
 import deepCopy from 'immutability-helper';
 import Square from './Square.jsx';
 import AIAgent from './AIAgent.jsx';
+import Boundary from './Boundary.jsx';
+import BoardVisitor from './BoardVisitor.jsx';
 
 class Board extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.board = new Array(props.size);
+    this.boundary = None;
     this.playerTurn = true;
 
     // initialize board
@@ -17,6 +19,11 @@ class Board extends React.Component {
     }
 
     this.agent = new AIAgent(this.board, 2);
+    this.visitor = new BoardVisitor(this.board, props.size);
+  }
+
+  setBoundary(boundary) {
+    this.boundary = boundary;
   }
 
   handleClick(row, col) {
