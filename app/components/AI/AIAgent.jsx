@@ -141,7 +141,7 @@ class AIAgent {
     // console.log(evaluateVisitor);
     // console.log(evaluateVisitor.opponentOpenThree);
     let score = - 2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
-    // console.log('SCORE: ' + score);
+    console.log('SCORE: ' + score);
     return score;
   }
 

@@ -23,7 +23,7 @@ class Board extends React.Component {
 
   handleClick(row, col) {
     // We only handle click if it is the right turn
-    if (this.playerTurn) {
+    if (this.playerTurn && this.tmp[row][col] == null) {
       this.tmp[row][col] = 'X';
 
       this.forceUpdate();
