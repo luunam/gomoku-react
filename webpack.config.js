@@ -1,7 +1,8 @@
 module.exports = {
   entry: "./app/components/Game.jsx",
   output: {
-    filename: "public/bundle.js"
+    filename: "public/bundle.js",
+    sourceMapFilename: "public/bundle.js.map",
   },
   devtool: "source-map",
   module: {

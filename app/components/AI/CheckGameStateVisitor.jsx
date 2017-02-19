@@ -29,7 +29,7 @@ class CheckGameStateVisitor {
   }
 
   reset() {
-    this.currentState = null;
+    this.currentSymbol = null;
     this.currentCount = 0;
   }
 }

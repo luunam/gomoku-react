@@ -1,11 +1,7 @@
-import React from 'react';
-import deepCopy from 'immutability-helper';
 import deepcopy from 'deepcopy';
-
+import React from 'react';
 import Square from './Square.jsx';
-import AIAgent from './AIAgent.jsx';
-import Boundary from './Boundary.jsx';
-import BoardVisitor from './BoardVisitor.jsx';
+import AIAgent from './AI/AIAgent.jsx';
 
 class Board extends React.Component {
   constructor(props) {
@@ -20,7 +16,6 @@ class Board extends React.Component {
     }
 
     this.agent = new AIAgent(2);
-    this.visitor = new BoardVisitor(this.tmp, props.size);
 
     this.size = props.size;
     this.props = props;
@@ -31,15 +26,11 @@ class Board extends React.Component {
     if (this.playerTurn) {
       this.tmp[row][col] = 'X';
 
-      this.setState({key: 'tmp'});
-      console.log(this.boundary);
-      if (this.boundary == null) {
-        this.boundary = new Boundary(row, row, col, col);
-      } else {
-        this.boundary = this.boundary.getNewBoundary(row, col);
-      }
+      this.forceUpdate();
 
       let move = this.agent.calculateNextMove(row, col, this);
+
+      // console.log('COUNT ' + this.agent.count);
 
       this.tmp[move.x][move.y] = 'O';
       this.setState({key: 'tmp'});
@@ -87,7 +78,7 @@ class Board extends React.Component {
 
   clone() {
     let newBoard = new Board({size: 15});
-    newBoard.boundary = deepcopy(this.boundary);
+    newBoard.tmp = deepcopy(this.tmp);
     return newBoard;
   }
 }
