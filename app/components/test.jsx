@@ -37,7 +37,7 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
-    this.state = {
+    this.tmp = {
       history: [{
         squares: Array(9).fill(null),
       }],
@@ -46,21 +46,21 @@ class Game extends React.Component {
     };
   }
   handleClick(i) {
-    var history = this.state.history.slice(0, this.state.stepNumber + 1);
+    var history = this.tmp.history.slice(0, this.tmp.stepNumber + 1);
     var current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
 
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.tmp.xIsNext ? 'X' : 'O';
 
     this.setState({
       history: history.concat([{
         squares: squares
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
+      xIsNext: !this.tmp.xIsNext,
     });
   }
   jumpTo(step) {
@@ -70,15 +70,15 @@ class Game extends React.Component {
     });
   }
   render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
+    const history = this.tmp.history;
+    const current = history[this.tmp.stepNumber];
 
     const winner = calculateWinner(current.squares);
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (this.tmp.xIsNext ? 'X' : 'O');
     }
 
     const moves = history.map((step, move) => {

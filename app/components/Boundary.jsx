@@ -16,3 +16,5 @@ class Boundary {
     return new Boundary(newMaxX, newMinX, newMaxY, newMinY);
   }
 }
+
+export default Boundary;

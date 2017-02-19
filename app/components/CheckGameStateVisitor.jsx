@@ -2,18 +2,17 @@ class CheckGameStateVisitor {
 
   constructor() {
     this.currentCount = 0;
-    this.currentSymbol = None;
+    this.currentSymbol = null;
+    this.gameFinished = false;
   }
 
-  visit(board, x, y, result) {
-    let thisSymbol = board[x][y];
-    if (thisSymbol !== null) {
-      if (thisSymbol.equals(this.currentSymbol)) {
+  visit(board, x, y) {
+    let thisSymbol = board.get(x, y);
+    if (thisSymbol != null) {
+      if (thisSymbol == this.currentSymbol) {
         this.currentCount += 1;
         if (this.currentCount == 5) {
-          result.gameFinished = true;
-          result.winner = this.currentSymbol;
-
+          this.gameFinished = true;
           return true;
         }
       }
@@ -29,6 +28,10 @@ class CheckGameStateVisitor {
     return false;
   }
 
+  reset() {
+    this.currentState = null;
+    this.currentCount = 0;
+  }
 }
 
 export default CheckGameStateVisitor;

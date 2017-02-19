@@ -1,5 +1,7 @@
 import React from 'react';
 import deepCopy from 'immutability-helper';
+import deepcopy from 'deepcopy';
+
 import Square from './Square.jsx';
 import AIAgent from './AIAgent.jsx';
 import Boundary from './Boundary.jsx';
@@ -9,34 +11,38 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.board = new Array(props.size);
-    this.boundary = None;
+    this.tmp = new Array(props.size);
     this.playerTurn = true;
 
-    // initialize board
+    // initialize tmp
     for (let i = 0; i < props.size; i++) {
-      this.board[i] = new Array(props.size);
+      this.tmp[i] = new Array(props.size);
     }
 
-    this.agent = new AIAgent(this.board, 2);
-    this.visitor = new BoardVisitor(this.board, props.size);
-  }
+    this.agent = new AIAgent(2);
+    this.visitor = new BoardVisitor(this.tmp, props.size);
 
-  setBoundary(boundary) {
-    this.boundary = boundary;
+    this.size = props.size;
+    this.props = props;
   }
 
   handleClick(row, col) {
-    console.log(row);
-    console.log(col);
     // We only handle click if it is the right turn
     if (this.playerTurn) {
-      this.board[row][col] = 'X';
-      this.agent.calculateNextMove(row, col);
-      //this.playerTurn = false;
-      this.setState({
-        key: 'new value'
-      });
+      this.tmp[row][col] = 'X';
+
+      this.setState({key: 'tmp'});
+      console.log(this.boundary);
+      if (this.boundary == null) {
+        this.boundary = new Boundary(row, row, col, col);
+      } else {
+        this.boundary = this.boundary.getNewBoundary(row, col);
+      }
+
+      let move = this.agent.calculateNextMove(row, col, this);
+
+      this.tmp[move.x][move.y] = 'O';
+      this.setState({key: 'tmp'});
     }
   }
 
@@ -44,7 +50,7 @@ class Board extends React.Component {
     let arr = [];
     for (let col = 0; col < this.props.size; col++) {
       arr.push(
-        <Square value={this.board[row][col]}
+        <Square value={this.tmp[row][col]}
                 key={row * this.props.size + col}
                 onClick={() => this.handleClick(row, col)}/>
       );
@@ -64,12 +70,25 @@ class Board extends React.Component {
     return arr;
   }
 
+  get(x, y) {
+    return this.tmp[x][y];
+  }
+
+  set(x, y, val) {
+    this.tmp[x][y] = val;
+  }
   render() {
     return(
       <div className="board">
         {this.renderBoard()}
       </div>
     );
+  }
+
+  clone() {
+    let newBoard = new Board({size: 15});
+    newBoard.boundary = deepcopy(this.boundary);
+    return newBoard;
   }
 }
 
