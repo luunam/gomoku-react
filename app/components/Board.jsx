@@ -1,7 +1,7 @@
 import deepcopy from 'deepcopy';
 import React from 'react';
 import Square from './Square.jsx';
-import AIAgent from './AI/AIAgent.jsx';
+import AIAgent from './bot/AIAgent.jsx';
 
 class Board extends React.Component {
   constructor(props) {

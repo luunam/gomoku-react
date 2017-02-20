@@ -28,6 +28,7 @@ class EvaluateVisitor {
           this.opponentFour += 1;
         }
       }
+
       this.currentCount = 0;
       this.oneEndOpening = true;
       this.currentSymbol = null;

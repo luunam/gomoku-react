@@ -5,9 +5,13 @@ class BoardVisitor {
 
   visitBoard(board, cellVisitor) {
     this.traverseColumn(board, cellVisitor);
+    cellVisitor.reset();
     this.traverseRow(board, cellVisitor);
+    cellVisitor.reset();
     this.traverseMainDiagonal(board, cellVisitor);
+    cellVisitor.reset();
     this.traverseAuxilaryDiagonal(board, cellVisitor);
+    cellVisitor.reset();
   }
 
   traverseAuxilaryDiagonal(board, cellVisitor) {

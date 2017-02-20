@@ -1,5 +1,5 @@
 'use strict';
-// AI representation of the game
+// bot representation of the game
 import deepcopy from 'deepcopy';
 
 class GameState {
