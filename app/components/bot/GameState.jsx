@@ -12,6 +12,7 @@ class GameState {
       y: y,
       symbol: symbol
     };
+    this.score = -2000;
   }
 
   /**
@@ -20,6 +21,9 @@ class GameState {
    * @returns {Array<GameState>}
    */
   generateSuccessors(symbol) {
+    if (this.board == null) {
+      console.log('NULL');
+    }
     let successors = [];
 
     let minX = Math.max(0, this.boundary.minX - 1);
@@ -27,6 +31,8 @@ class GameState {
     let minY = Math.max(0, this.boundary.minY - 1);
     let maxY = Math.min(this.size - 1, this.boundary.maxY + 1);
 
+    // console.log(this.boundary);
+    // console.log(minX + ':' + maxX + ':' + minY + ':' + maxY);
     for (let i = minX; i <= maxX; i++) {
       for (let j = minY; j <= maxY; j++) {
 
@@ -34,7 +40,6 @@ class GameState {
           let newBoard = this.board.clone();
           newBoard.set(i, j, symbol);
           let newBoundary= this.boundary.getNewBoundary(i, j);
-          console.log(newBoundary);
           let newGameState = new GameState(newBoard, newBoundary, i, j, symbol);
 
           successors.push(newGameState);
@@ -43,10 +48,6 @@ class GameState {
     }
     // console.log('LENGTH: ' + successors.length);
     return successors;
-  }
-
-  clone() {
-    return new GameState(this.board.clone(), deepcopy(boundary));
   }
 }
 

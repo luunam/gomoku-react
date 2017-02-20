@@ -4,6 +4,7 @@ class CheckGameStateVisitor {
     this.currentCount = 0;
     this.currentSymbol = null;
     this.gameFinished = false;
+    this.winner = null;
   }
 
   visit(board, x, y) {
@@ -13,6 +14,7 @@ class CheckGameStateVisitor {
         this.currentCount += 1;
         if (this.currentCount == 5) {
           this.gameFinished = true;
+          this.winner = this.currentSymbol;
           return true;
         }
       }

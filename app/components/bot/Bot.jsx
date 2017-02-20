@@ -6,7 +6,7 @@ import CheckGameStateVisitor from './CheckGameStateVisitor.jsx';
 import EvaluateVisitor from './EvaluateVisitor.jsx';
 import GameState from './GameState.jsx';
 
-class AIAgent {
+class Bot {
   constructor(depth) {
     this.depth = depth;
     this.symbol = 'O';
@@ -33,6 +33,8 @@ class AIAgent {
     let gameState = new GameState(board, deepcopy(this.boundary), x, y, 'X');
     
     let res = this.search(0, gameState, 0, -1000000, 1000000);
+
+    // consol
 
     return res.move;
   }
@@ -73,18 +75,19 @@ class AIAgent {
     let possibleMoves = gameState.generateSuccessors('O');
     let ret = null;
 
-    possibleMoves.forEach(function(state) {
+    for (let i = 0; i < possibleMoves.length; i++) {
+      let state = possibleMoves[i];
       let newState = this.search(depth, state, 1, alpha, beta);
       if (newState.score > v) {
         v = newState.score;
-        ret = newState;
+        ret = state;
 
         if (v > beta) {
           return ret;
         }
         alpha = Math.max(alpha, v);
       }
-    }, this);
+    }
     return ret;
   }
 
@@ -101,19 +104,20 @@ class AIAgent {
     let possibleMoves = gameState.generateSuccessors('X');
     let ret = null;
 
-    possibleMoves.forEach(function(state) {
+    for (let i = 0; i < possibleMoves.length; i++) {
+      let state = possibleMoves[i];
       let newState = this.search(depth+1, state, 0, alpha, beta);
       if (newState.score < v) {
         v = newState.score;
 
-        ret = newState;
+        ret = state;
 
         if (v < alpha) {
           return ret;
         }
         beta = Math.min(beta, v);
       }
-    }, this);
+    }
     return ret;
   }
 
@@ -129,22 +133,22 @@ class AIAgent {
     visitor.visitBoard(gameState.board, gameStateVisitor);
 
     if (gameStateVisitor.gameFinished) {
-      if (gameStateVisitor.currentSymbol == this.symbol) {
+      if (gameStateVisitor.winner == this.symbol) {
         return 1000;
       } else {
         return -1000;
       }
     }
 
-    let evaluateVisitor = new EvaluateVisitor('O');
+    let evaluateVisitor = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluateVisitor);
     // console.log(evaluateVisitor);
     // console.log(evaluateVisitor.opponentOpenThree);
     let score = - 2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
-    console.log('SCORE: ' + score);
+    // console.log('SCORE: ' + score);
     return score;
   }
 
 }
 
-export default AIAgent;
+export default Bot;

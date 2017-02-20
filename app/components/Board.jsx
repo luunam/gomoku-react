@@ -1,21 +1,21 @@
 import deepcopy from 'deepcopy';
 import React from 'react';
 import Square from './Square.jsx';
-import AIAgent from './bot/AIAgent.jsx';
+import Bot from './bot/Bot.jsx';
 
 class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.tmp = new Array(props.size);
+    this.board = new Array(props.size);
     this.playerTurn = true;
 
-    // initialize tmp
+    // initialize board
     for (let i = 0; i < props.size; i++) {
-      this.tmp[i] = new Array(props.size);
+      this.board[i] = new Array(props.size);
     }
 
-    this.agent = new AIAgent(2);
+    this.agent = new Bot(1);
 
     this.size = props.size;
     this.props = props;
@@ -23,8 +23,8 @@ class Board extends React.Component {
 
   handleClick(row, col) {
     // We only handle click if it is the right turn
-    if (this.playerTurn && this.tmp[row][col] == null) {
-      this.tmp[row][col] = 'X';
+    if (this.playerTurn && this.board[row][col] == null) {
+      this.board[row][col] = 'X';
 
       this.forceUpdate();
 
@@ -32,8 +32,8 @@ class Board extends React.Component {
 
       // console.log('COUNT ' + this.agent.count);
 
-      this.tmp[move.x][move.y] = 'O';
-      this.setState({key: 'tmp'});
+      this.board[move.x][move.y] = 'O';
+      this.setState({key: 'board'});
     }
   }
 
@@ -41,7 +41,7 @@ class Board extends React.Component {
     let arr = [];
     for (let col = 0; col < this.props.size; col++) {
       arr.push(
-        <Square value={this.tmp[row][col]}
+        <Square value={this.board[row][col]}
                 key={row * this.props.size + col}
                 onClick={() => this.handleClick(row, col)}/>
       );
@@ -62,11 +62,19 @@ class Board extends React.Component {
   }
 
   get(x, y) {
-    return this.tmp[x][y];
+    try {
+      return this.board[x][y];
+    } catch(err) {
+      console.log('ERR_N: ' + err);
+      console.log(x + ':' + y);
+
+      console.log(this.board);
+    }
+
   }
 
   set(x, y, val) {
-    this.tmp[x][y] = val;
+    this.board[x][y] = val;
   }
   render() {
     return(
@@ -77,8 +85,8 @@ class Board extends React.Component {
   }
 
   clone() {
-    let newBoard = new Board({size: 15});
-    newBoard.tmp = deepcopy(this.tmp);
+    let newBoard = new Board({size: this.size});
+    newBoard.board = deepcopy(this.board);
     return newBoard;
   }
 }
