@@ -23,7 +23,8 @@ test('test evaluate visitor board 2', () => {
   expect(evaluator.opponentFour).toBe(2);
   expect(evaluator.ourOpenThree).toBe(1);
   expect(evaluator.opponentOpenThree).toBe(0);
-  expect(evaluator.ourFour).toBe(1);
+  expect(evaluator.ourFour).toBe(0);
+  expect(evaluator.ourOpenFour).toBe(1);
 });
 
 test('test evaluate visitor board 3', () => {
@@ -33,10 +34,12 @@ test('test evaluate visitor board 3', () => {
   let visitor = new BoardVisitor();
   visitor.visitBoard(board, evaluator);
 
-  expect(evaluator.opponentFour).toBe(3);
+  expect(evaluator.opponentFour).toBe(2);
+  expect(evaluator.opponentOpenFour).toBe(1);
   expect(evaluator.ourOpenThree).toBe(1);
   expect(evaluator.opponentOpenThree).toBe(4);
-  expect(evaluator.ourFour).toBe(1);
+  expect(evaluator.ourFour).toBe(0);
+  expect(evaluator.ourOpenFour).toBe(1);
 });
 
 test('test evaluate visitor board 5', () => {

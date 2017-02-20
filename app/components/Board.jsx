@@ -2,6 +2,8 @@ import deepcopy from 'deepcopy';
 import React from 'react';
 import Square from './Square.jsx';
 import Bot from './bot/Bot.jsx';
+import BoardVisitor from './bot/BoardVisitor.jsx';
+import CheckGameStateVisitor from './bot/CheckGameStateVisitor.jsx';
 
 class Board extends React.Component {
   constructor(props) {
@@ -19,20 +21,42 @@ class Board extends React.Component {
 
     this.size = props.size;
     this.props = props;
+
+    this.visitor = new BoardVisitor();
+
+    this.state = {
+      'WIN': 1,
+      'LOSE': 2,
+      'UNFINISHED': 3
+    };
+
+    this.symbol = 'X';
+    this.finish = false;
+  }
+
+  checkGameState() {
+    let checkGameStateVisitor = new CheckGameStateVisitor();
+    this.visitor.visitBoard(this, checkGameStateVisitor);
+    if (checkGameStateVisitor.gameFinished) {
+      if (checkGameStateVisitor.winner == this.symbol) {
+        this.props.gameFinish('WIN');
+        this.finish = true;
+      } else {
+        this.props.gameFinish('YOU LOSE BITCH!');
+        this.finish = true;
+      }
+    }
   }
 
   handleClick(row, col) {
     // We only handle click if it is the right turn
-    if (this.playerTurn && this.board[row][col] == null) {
-      this.board[row][col] = 'X';
-
-      this.forceUpdate();
-
+    if (!this.finish && this.playerTurn && this.board[row][col] == null) {
+      this.board[row][col] = this.symbol;
+      this.checkGameState();
       let move = this.agent.calculateNextMove(row, col, this);
 
-      // console.log('COUNT ' + this.agent.count);
-
-      this.board[move.x][move.y] = 'O';
+      this.board[move.x][move.y] = move.symbol;
+      this.checkGameState();
       this.setState({key: 'board'});
     }
   }

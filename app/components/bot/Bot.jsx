@@ -144,7 +144,7 @@ class Bot {
     visitor.visitBoard(gameState.board, evaluateVisitor);
     // console.log(evaluateVisitor);
     // console.log(evaluateVisitor.opponentOpenThree);
-    let score = - 2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
+    let score = -5 * evaluateVisitor.opponentOpenFour - 2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
     // console.log('SCORE: ' + score);
     return score;
   }

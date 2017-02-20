@@ -4,16 +4,31 @@ import Board from './Board.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-var Game = React.createClass({
+class Game extends React.Component{
+
+  constructor(props) {
+    super(props);
+    this.result = 'UNFINISHED';
+  }
+
+  gameFinish(status) {
+    this.result = status;
+    this.setState({result: status});
+    console.log(status);
+  }
+
   render() {
     return (
       <div className="game">
         <div>
-          <Board size={15}/>
+          <Board size={15} gameFinish={(status) => this.gameFinish(status)}/>
+        </div>
+        <div>
+          {this.result}
         </div>
       </div>
     );
   }
-});
+}
 
 ReactDOM.render(<Game />, document.getElementById('app'));
