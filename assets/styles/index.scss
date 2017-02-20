@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+$grid-size: 45px;
+
+#test {
+  color: red;
+}
+
+.square {
+  background: #fff;
+  margin-top: -1px;
+  margin-right: -1px;
+
+  border: 1px solid #000000;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: $grid-size;
+  float: left;
+
+  padding: 0;
+  text-align: center;
+
+  height: $grid-size;
+  width: $grid-size;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  font-family: 'Lato';
+
+  .title {
+    font-size: 20px;
+  }
+
+  img {
+    margin-left: 5px;
+    width: 16px;
+  }
+}
+
