@@ -33,7 +33,9 @@ test('test bot board 7', () => {
   bot.boundary = new Boundary(6, 0, 6, 0);
   let ret = bot.calculateNextMove(4, 3, board);
 
-  console.log(ret);
-  console.log(board.draw());
-  expect(1).toBe(1);
+  let possibleMoves = [
+    {x: 1, y: 3, symbol: 'O'},
+    {x: 5, y: 3, symbol: 'O'}
+  ];
+  expect(possibleMoves).toContainEqual(ret);
 });

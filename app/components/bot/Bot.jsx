@@ -31,10 +31,7 @@ class Bot {
     }
 
     let gameState = new GameState(board, deepcopy(this.boundary), x, y, 'X');
-    
     let res = this.search(0, gameState, 0, -1000000, 1000000);
-
-    // consol
 
     return res.move;
   }
@@ -142,10 +139,8 @@ class Bot {
 
     let evaluateVisitor = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluateVisitor);
-    // console.log(evaluateVisitor);
-    // console.log(evaluateVisitor.opponentOpenThree);
-    let score = -5 * evaluateVisitor.opponentOpenFour - 2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
-    // console.log('SCORE: ' + score);
+
+    let score = - 5 * evaluateVisitor.opponentOpenFour -  2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
     return score;
   }
 

@@ -54,3 +54,16 @@ test('test evaluate visitor board 5', () => {
   expect(evaluator.opponentOpenThree).toBe(0);
   expect(evaluator.ourFour).toBe(1);
 });
+
+test('test evaluate visitor board 8', () => {
+  let board = convertTxtToBoard('board8');
+
+  let evaluator = new EvaluateVisitor('X');
+  let visitor = new BoardVisitor();
+  visitor.visitBoard(board, evaluator);
+
+  expect(evaluator.opponentFour).toBe(0);
+  expect(evaluator.ourOpenThree).toBe(1);
+  expect(evaluator.opponentOpenThree).toBe(0);
+  expect(evaluator.ourFour).toBe(1);
+});

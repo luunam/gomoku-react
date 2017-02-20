@@ -61,6 +61,9 @@ class EvaluateVisitor {
           }
         }
 
+        if (this.currentSymbol != null) {
+          this.oneEndOpening = false;
+        }
         this.currentSymbol = board.get(x, y);
         this.currentCount = 1;
 
