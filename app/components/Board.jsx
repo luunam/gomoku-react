@@ -52,11 +52,13 @@ class Board extends React.Component {
     // We only handle click if it is the right turn
     if (!this.finish && this.playerTurn && this.board[row][col] == null) {
       this.board[row][col] = this.symbol;
+
       this.checkGameState();
       let move = this.agent.calculateNextMove(row, col, this);
 
       this.board[move.x][move.y] = move.symbol;
       this.checkGameState();
+
       this.setState({key: 'board'});
     }
   }

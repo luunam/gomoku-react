@@ -39,3 +39,36 @@ test('test bot board 7', () => {
   ];
   expect(possibleMoves).toContainEqual(ret);
 });
+
+
+test('test bot board 9', () => {
+
+  let board = convertTxtToBoard('board9');
+  let bot = new Bot(1);
+
+  bot.boundary = new Boundary(6, 0, 6, 0);
+  let ret = bot.calculateNextMove(4, 2, board);
+
+  let possibleMoves = [
+    {x: 0, y: 0, symbol: 'O'},
+    {x: 0, y: 5, symbol: 'O'}
+  ];
+
+  expect(possibleMoves).toContainEqual(ret);
+});
+
+test('test bot board 9_2', () => {
+
+  let board = convertTxtToBoard('board9');
+  let bot = new Bot(1);
+
+  bot.boundary = new Boundary(6, 0, 6, 0);
+  let ret = bot.calculateNextMove(4, 3, board);
+
+  let possibleMoves = [
+    {x: 0, y: 0, symbol: 'O'},
+    {x: 0, y: 5, symbol: 'O'}
+  ];
+
+  expect(possibleMoves).toContainEqual(ret);
+});

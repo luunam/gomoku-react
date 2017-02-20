@@ -12,6 +12,12 @@ class Bot {
     this.symbol = 'O';
     this.count = 0;
     this.boundary = null;
+
+    this.moveState = {
+      'WIN': 1,
+      'LOSE': 2,
+      'UNDECIDE': 3
+    }
   }
 
   /**
@@ -74,6 +80,11 @@ class Bot {
 
     for (let i = 0; i < possibleMoves.length; i++) {
       let state = possibleMoves[i];
+      let analyzeMove = this.checkMove(state);
+
+      if (analyzeMove == this.moveState.WIN) {
+        return state;
+      }
       let newState = this.search(depth, state, 1, alpha, beta);
       if (newState.score > v) {
         v = newState.score;
@@ -103,6 +114,12 @@ class Bot {
 
     for (let i = 0; i < possibleMoves.length; i++) {
       let state = possibleMoves[i];
+      let analyzeMove = this.checkMove(state);
+
+      if (analyzeMove == this.moveState.LOSE) {
+        return state;
+      }
+
       let newState = this.search(depth+1, state, 0, alpha, beta);
       if (newState.score < v) {
         v = newState.score;
@@ -140,8 +157,28 @@ class Bot {
     let evaluateVisitor = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluateVisitor);
 
-    let score = - 5 * evaluateVisitor.opponentOpenFour -  2 * evaluateVisitor.opponentOpenThree - evaluateVisitor.opponentFour;
-    return score;
+    let threat =  5 * evaluateVisitor.opponentOpenFour +  2 * evaluateVisitor.opponentOpenThree + evaluateVisitor.opponentFour;
+    let offensiveRating = 5 * evaluateVisitor.ourOpenFour +  2 * evaluateVisitor.ourOpenThree + evaluateVisitor.ourFour;
+
+    if (threat != 0) {
+      return -threat;
+    } else {
+      return offensiveRating;
+    }
+  }
+
+  checkMove(gameState) {
+    let visitor = new BoardVisitor();
+    let gameStateVisitor = new CheckGameStateVisitor();
+    visitor.visitBoard(gameState.board, gameStateVisitor);
+
+    if (gameStateVisitor.gameFinished) {
+      if (gameStateVisitor.winner == this.symbol) {
+        return this.moveState.WIN;
+      } else {
+        return this.moveState.LOSE;
+      }
+    }
   }
 
 }
