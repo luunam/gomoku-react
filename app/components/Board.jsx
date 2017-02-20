@@ -113,6 +113,18 @@ class Board extends React.Component {
     newBoard.board = deepcopy(this.board);
     return newBoard;
   }
+
+  draw() {
+    let copy = deepcopy(this.board);
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        if (copy[i][j] == null) {
+          copy[i][j] = ' ';
+        }
+      }
+    }
+    return copy;
+  }
 }
 
 export default Board;
