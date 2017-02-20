@@ -1,4 +1,4 @@
-require('../../styles/index.scss');
+require('../../assets/styles/index.scss');
 
 import Board from './Board.jsx';
 import React from 'react';
@@ -23,8 +23,16 @@ class Game extends React.Component{
         <div>
           <Board size={15} gameFinish={(status) => this.gameFinish(status)}/>
         </div>
-        <div>
-          {this.result}
+        <div className="panel">
+          <div className="title">
+            GOMOKU
+            <a href="https://github.com/luunam/gomoku-react">
+              <img src="../assets/images/github-icon/PNG/GitHub-Mark-32px.png"/>
+            </a>
+          </div>
+          <div>
+            Game state: {this.result}
+          </div>
         </div>
       </div>
     );
