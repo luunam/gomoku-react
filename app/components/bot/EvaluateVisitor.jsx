@@ -3,7 +3,7 @@ class EvaluateVisitor {
   constructor(symbol) {
     this.currentCount = 0;
     this.oneEndOpening = false;
-    this.currentSymbol = null;
+    this.lastSeenSymbol = 'OUT OF BOARD';
     this.symbol = symbol;
 
     this.ourOpenThree = 0;
@@ -13,58 +13,84 @@ class EvaluateVisitor {
 
     this.ourOpenFour = 0;
     this.opponentOpenFour = 0;
+
+    this.ourThree = 0;
+    this.opponentThree = 0;
+
+    this.ourOpenTwo = 0;
+    this.opponentOpenTwo = 0;
   }
 
   visit(board, x, y) {
-    if (board.get(x, y) == null) {
+    let current = board.get(x, y);
+    if (current == null) {
 
       if (this.oneEndOpening) {
 
+        if (this.currentCount == 2) {
+          if (this.symbol == this.lastSeenSymbol) {
+            this.ourOpenTwo++;
+          } else if (this.lastSeenSymbol != null) {
+            this.opponentOpenTwo++;
+          }
+        }
+
         if (this.currentCount == 3) {
-          if (this.symbol == this.currentSymbol) {
+          if (this.symbol == this.lastSeenSymbol) {
             this.ourOpenThree++;
-          } else if (this.currentSymbol != null) {
+          } else if (this.lastSeenSymbol != null) {
             this.opponentOpenThree += 1;
           }
         }
 
         if (this.currentCount == 4) {
-          if (this.symbol == this.currentSymbol) {
+          if (this.symbol == this.lastSeenSymbol) {
             this.ourOpenFour++;
-          } else if (this.currentSymbol != null) {
+          } else if (this.lastSeenSymbol != null) {
             this.opponentOpenFour += 1;
           }
         }
         this.currentCount = 0;
 
       } else if (this.currentCount >= 4) {
-        if (this.symbol == this.currentSymbol) {
+        if (this.symbol == this.lastSeenSymbol) {
           this.ourFour += 1;
-        } else if (this.currentSymbol != null) {
+        } else if (this.lastSeenSymbol != null) {
           this.opponentFour += 1;
+        }
+      } else if (this.currentCount == 3) {
+        if (this.lastSeenSymbol == this.symbol) {
+          this.ourThree += 1;
+        } else if (this.lastSeenSymbol != null) {
+          this.opponentThree += 1;
         }
       }
 
       this.currentCount = 0;
       this.oneEndOpening = true;
-      this.currentSymbol = null;
+      this.lastSeenSymbol = null;
 
     } else {
-
-      if (board.get(x, y) != this.currentSymbol) {
-
-        if (this.oneEndOpening && this.currentCount >= 4) {
-          if (this.currentSymbol == this.symbol) {
-            this.ourFour += 1;
-          } else if (this.currentSymbol != null) {
-            this.opponentFour += 1;
+      // Current symbol is not null
+      if (current != this.lastSeenSymbol) {
+        if (this.oneEndOpening) {
+          if (this.currentCount >= 4) {
+            if (this.lastSeenSymbol == this.symbol) {
+              this.ourFour += 1;
+            } else if (this.lastSeenSymbol != null) {
+              this.opponentFour += 1;
+            }
+          } else if (this.currentCount == 3) {
+            if (this.lastSeenSymbol == this.symbol) {
+              this.ourThree += 1;
+            } else if (this.lastSeenSymbol != null) {
+              this.opponentThree += 1;
+            }
           }
         }
 
-        if (this.currentSymbol != null) {
-          this.oneEndOpening = false;
-        }
-        this.currentSymbol = board.get(x, y);
+        this.oneEndOpening = (this.lastSeenSymbol == null);
+        this.lastSeenSymbol = current;
         this.currentCount = 1;
 
       } else {
@@ -78,7 +104,7 @@ class EvaluateVisitor {
   reset() {
     this.currentCount = 0;
     this.oneEndOpening = false;
-    this.currentSymbol = null;
+    this.lastSeenSymbol = 'OUT OF BOARD';
   }
 }
 

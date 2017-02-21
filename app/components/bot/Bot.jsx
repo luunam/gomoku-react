@@ -10,7 +10,6 @@ class Bot {
   constructor(depth) {
     this.depth = depth;
     this.symbol = 'O';
-    this.count = 0;
     this.boundary = null;
 
     this.moveState = {
@@ -37,8 +36,10 @@ class Bot {
     }
 
     let gameState = new GameState(board, deepcopy(this.boundary), x, y, 'X');
-    let res = this.search(0, gameState, 0, -1000000, 1000000);
+    let gameStateBackup = new GameState(board, deepcopy(this.boundary), x, y, 'X');
 
+    let res = this.search(0, gameState, 0, -1000000, 1000000);
+    this.boundary = this.boundary.getNewBoundary(res.move.x, res.move.y);
     return res.move;
   }
 
@@ -80,13 +81,16 @@ class Bot {
 
     for (let i = 0; i < possibleMoves.length; i++) {
       let state = possibleMoves[i];
+      console.log(state.move);
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.WIN) {
         return state;
       }
+
       let newState = this.search(depth, state, 1, alpha, beta);
-      if (newState.score > v) {
+      console.log(newState.score);
+      if (newState.score != null && newState.score > v) {
         v = newState.score;
         ret = state;
 
@@ -121,7 +125,7 @@ class Bot {
       }
 
       let newState = this.search(depth+1, state, 0, alpha, beta);
-      if (newState.score < v) {
+      if (newState.score != null && newState.score < v) {
         v = newState.score;
 
         ret = state;
@@ -141,7 +145,6 @@ class Bot {
    * @returns {number}
    */
   evaluate(gameState) {
-    this.count++;
     let visitor = new BoardVisitor();
     let gameStateVisitor = new CheckGameStateVisitor();
     visitor.visitBoard(gameState.board, gameStateVisitor);
@@ -154,16 +157,21 @@ class Bot {
       }
     }
 
-    let evaluateVisitor = new EvaluateVisitor(this.symbol);
-    visitor.visitBoard(gameState.board, evaluateVisitor);
+    let evaluator = new EvaluateVisitor(this.symbol);
+    visitor.visitBoard(gameState.board, evaluator);
 
-    let threat =  5 * evaluateVisitor.opponentOpenFour +  2 * evaluateVisitor.opponentOpenThree + evaluateVisitor.opponentFour;
-    let offensiveRating = 5 * evaluateVisitor.ourOpenFour +  2 * evaluateVisitor.ourOpenThree + evaluateVisitor.ourFour;
+    let threat =  20 * evaluator.opponentOpenFour +
+      10 * evaluator.opponentOpenThree +
+      6 * evaluator.opponentFour +
+      3 * evaluator.opponentThree +
+      evaluator.opponentOpenTwo;
+
+    let offensiveRating = 5 * evaluator.ourOpenFour +  2 * evaluator.ourOpenThree + evaluator.ourFour;
 
     if (threat != 0) {
       return -threat;
     } else {
-      return offensiveRating;
+      return Math.random(10);
     }
   }
 

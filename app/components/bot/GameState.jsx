@@ -12,7 +12,7 @@ class GameState {
       y: y,
       symbol: symbol
     };
-    this.score = -2000;
+    this.score = null;
   }
 
   /**

@@ -39,10 +39,10 @@ class Board extends React.Component {
     this.visitor.visitBoard(this, checkGameStateVisitor);
     if (checkGameStateVisitor.gameFinished) {
       if (checkGameStateVisitor.winner == this.symbol) {
-        this.props.gameFinish('WIN');
+        this.props.gameFinish('YOU WIN');
         this.finish = true;
       } else {
-        this.props.gameFinish('YOU LOSE BITCH!');
+        this.props.gameFinish("I WIN, YOU'RE SO DUMB");
         this.finish = true;
       }
     }
