@@ -2,7 +2,7 @@ import convertTxtToBoard from '../utilities/convertTxtToBoard.jsx';
 import BoardVisitor from '../../app/components/bot/BoardVisitor.jsx';
 import CheckGameStateVisitor from '../../app/components/bot/CheckGameStateVisitor.jsx';
 
-test('check game state board 1', () => {
+test('check game gameState board 1', () => {
   let board = convertTxtToBoard('board1');
 
   let evaluator = new CheckGameStateVisitor();
@@ -12,7 +12,7 @@ test('check game state board 1', () => {
   expect(evaluator.gameFinished).toBe(false);
 });
 
-test('check game state board 4', () => {
+test('check game gameState board 4', () => {
   let board = convertTxtToBoard('board4');
 
   let evaluator = new CheckGameStateVisitor();
@@ -23,7 +23,7 @@ test('check game state board 4', () => {
   expect(evaluator.winner).toBe('X');
 });
 
-test('check game state board 5', () => {
+test('check game gameState board 5', () => {
   let board = convertTxtToBoard('board5');
 
   let evaluator = new CheckGameStateVisitor();

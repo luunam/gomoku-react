@@ -28,42 +28,22 @@ class EvaluateVisitor {
       if (this.oneEndOpening) {
 
         if (this.currentCount == 2) {
-          if (this.symbol == this.lastSeenSymbol) {
-            this.ourOpenTwo++;
-          } else if (this.lastSeenSymbol != null) {
-            this.opponentOpenTwo++;
-          }
+          this.increase('ourOpenTwo', 'opponentOpenTwo');
         }
 
         if (this.currentCount == 3) {
-          if (this.symbol == this.lastSeenSymbol) {
-            this.ourOpenThree++;
-          } else if (this.lastSeenSymbol != null) {
-            this.opponentOpenThree += 1;
-          }
+          this.increase('ourOpenThree', 'opponentOpenThree');
         }
 
         if (this.currentCount == 4) {
-          if (this.symbol == this.lastSeenSymbol) {
-            this.ourOpenFour++;
-          } else if (this.lastSeenSymbol != null) {
-            this.opponentOpenFour += 1;
-          }
+          this.increase('ourOpenFour', 'opponentOpenFour')
         }
         this.currentCount = 0;
 
       } else if (this.currentCount >= 4) {
-        if (this.symbol == this.lastSeenSymbol) {
-          this.ourFour += 1;
-        } else if (this.lastSeenSymbol != null) {
-          this.opponentFour += 1;
-        }
+        this.increase('ourFour', 'opponentFour');
       } else if (this.currentCount == 3) {
-        if (this.lastSeenSymbol == this.symbol) {
-          this.ourThree += 1;
-        } else if (this.lastSeenSymbol != null) {
-          this.opponentThree += 1;
-        }
+        this.increase('ourThree', 'opponentThree');
       }
 
       this.currentCount = 0;
@@ -75,17 +55,9 @@ class EvaluateVisitor {
       if (current != this.lastSeenSymbol) {
         if (this.oneEndOpening) {
           if (this.currentCount >= 4) {
-            if (this.lastSeenSymbol == this.symbol) {
-              this.ourFour += 1;
-            } else if (this.lastSeenSymbol != null) {
-              this.opponentFour += 1;
-            }
+            this.increase('ourFour', 'opponentFour');
           } else if (this.currentCount == 3) {
-            if (this.lastSeenSymbol == this.symbol) {
-              this.ourThree += 1;
-            } else if (this.lastSeenSymbol != null) {
-              this.opponentThree += 1;
-            }
+            this.increase('ourThree', 'opponentThree');
           }
         }
 
@@ -99,6 +71,14 @@ class EvaluateVisitor {
     }
 
     return false;
+  }
+
+  increase(ourAttribute, opponentAttribute) {
+    if (this.lastSeenSymbol == this.symbol) {
+      this[ourAttribute] = this[ourAttribute] + 1;
+    } else if (this.lastSeenSymbol != null) {
+      this[opponentAttribute] = this[opponentAttribute] + 1;
+    }
   }
 
   reset() {

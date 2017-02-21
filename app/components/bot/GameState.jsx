@@ -22,7 +22,7 @@ class GameState {
    */
   generateSuccessors(symbol) {
     if (this.board == null) {
-      console.log('NULL');
+      console.log('board is null in gamestate');
     }
     let successors = [];
 
@@ -31,8 +31,6 @@ class GameState {
     let minY = Math.max(0, this.boundary.minY - 1);
     let maxY = Math.min(this.size - 1, this.boundary.maxY + 1);
 
-    // console.log(this.boundary);
-    // console.log(minX + ':' + maxX + ':' + minY + ':' + maxY);
     for (let i = minX; i <= maxX; i++) {
       for (let j = minY; j <= maxY; j++) {
 
@@ -46,7 +44,12 @@ class GameState {
         }
       }
     }
-    // console.log('LENGTH: ' + successors.length);
+
+    if (successors.length == 0) {
+      console.log("can't find next move");
+      console.log(this.board.draw());
+      console.log(this.boundary);
+    }
     return successors;
   }
 }

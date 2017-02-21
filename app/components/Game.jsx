@@ -9,6 +9,7 @@ class Game extends React.Component{
   constructor(props) {
     super(props);
     this.result = 'UNFINISHED';
+    this.thought = 'IDLE';
   }
 
   gameFinish(status) {
@@ -17,15 +18,22 @@ class Game extends React.Component{
     console.log(status);
   }
 
+  changeThought(thought) {
+    this.thought = thought;
+    this.setState({result: thought});
+  }
+
   render() {
     return (
       <div className="game">
         <div>
-          <Board size={15} gameFinish={(status) => this.gameFinish(status)}/>
+          <Board size={15}
+                 gameFinish={(status) => this.gameFinish(status)}
+                 changeThought={(thought => this.changeThought(thought))}/>
         </div>
         <div className="panel">
           <div className="title">
-            GOMOKU v1.1
+            GOMOKU v1.2
             <a href="https://github.com/luunam/gomoku-react">
               <img src="images/github-icon/PNG/GitHub-Mark-64px.png"/>
             </a>

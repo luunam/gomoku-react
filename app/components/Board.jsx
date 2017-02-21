@@ -16,19 +16,11 @@ class Board extends React.Component {
     for (let i = 0; i < props.size; i++) {
       this.board[i] = new Array(props.size);
     }
-
     this.agent = new Bot(1);
-
     this.size = props.size;
     this.props = props;
 
     this.visitor = new BoardVisitor();
-
-    this.state = {
-      'WIN': 1,
-      'LOSE': 2,
-      'UNFINISHED': 3
-    };
 
     this.symbol = 'X';
     this.finish = false;
@@ -48,18 +40,34 @@ class Board extends React.Component {
     }
   }
 
+  sleep(milliseconds) {
+    let start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state != null && this.state.turn == 'computer') {
+      let move = this.agent.calculateNextMove(this.state.row, this.state.col, this);
+
+      this.board[move.x][move.y] = move.symbol;
+      this.checkGameState();
+      this.props.changeThought('IDLE');
+      this.setState({turn: 'human'});
+    }
+  }
+
   handleClick(row, col) {
     // We only handle click if it is the right turn
     if (!this.finish && this.playerTurn && this.board[row][col] == null) {
       this.board[row][col] = this.symbol;
-
-      this.checkGameState();
-      let move = this.agent.calculateNextMove(row, col, this);
-
-      this.board[move.x][move.y] = move.symbol;
       this.checkGameState();
 
-      this.setState({key: 'board'});
+      this.props.changeThought('I AM THINKING, STOP CLICKING');
+      this.setState({turn: 'computer', row: row, col: col});
     }
   }
 
@@ -88,15 +96,7 @@ class Board extends React.Component {
   }
 
   get(x, y) {
-    try {
-      return this.board[x][y];
-    } catch(err) {
-      console.log('ERR_N: ' + err);
-      console.log(x + ':' + y);
-
-      console.log(this.board);
-    }
-
+    return this.board[x][y];
   }
 
   set(x, y, val) {

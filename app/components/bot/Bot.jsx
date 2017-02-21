@@ -36,9 +36,14 @@ class Bot {
     }
 
     let gameState = new GameState(board, deepcopy(this.boundary), x, y, 'X');
-    let gameStateBackup = new GameState(board, deepcopy(this.boundary), x, y, 'X');
 
     let res = this.search(0, gameState, 0, -1000000, 1000000);
+
+    if (res == null) {
+      console.log('res is null');
+      console.log(this.boundary);
+      console.log(gameState);
+    }
     this.boundary = this.boundary.getNewBoundary(res.move.x, res.move.y);
     return res.move;
   }
@@ -54,7 +59,12 @@ class Bot {
    */
   search(depth, gameState, noMinAgent, alpha, beta) {
     if (depth == this.depth) {
-      gameState.score = this.evaluate(gameState);
+      let score = this.evaluate(gameState);
+      if (score == null) {
+        console.log('score is null');
+        console.log(gameState);
+      }
+      gameState.score = score;
       return gameState;
     } else {
       if (noMinAgent == 0) {
@@ -81,15 +91,15 @@ class Bot {
 
     for (let i = 0; i < possibleMoves.length; i++) {
       let state = possibleMoves[i];
-      console.log(state.move);
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.WIN) {
+        state.score = 1000;
         return state;
       }
 
       let newState = this.search(depth, state, 1, alpha, beta);
-      console.log(newState.score);
+      state.score = newState.score;
       if (newState.score != null && newState.score > v) {
         v = newState.score;
         ret = state;
@@ -98,6 +108,13 @@ class Bot {
           return ret;
         }
         alpha = Math.max(alpha, v);
+      }
+    }
+
+    if (ret == null) {
+      console.log('ret max is null');
+      for (let i = 0; i < possibleMoves.length; i++) {
+        console.log(possibleMoves[i].score);
       }
     }
     return ret;
@@ -121,10 +138,12 @@ class Bot {
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.LOSE) {
+        state.score = -1000;
         return state;
       }
 
       let newState = this.search(depth+1, state, 0, alpha, beta);
+      state.score = newState.score;
       if (newState.score != null && newState.score < v) {
         v = newState.score;
 
@@ -134,6 +153,12 @@ class Bot {
           return ret;
         }
         beta = Math.min(beta, v);
+      }
+    }
+    if (ret == null) {
+      console.log('ret min is null');
+      for (let i = 0; i < possibleMoves.length; i++) {
+        console.log(possibleMoves[i].score);
       }
     }
     return ret;
@@ -160,18 +185,20 @@ class Bot {
     let evaluator = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluator);
 
-    let threat =  20 * evaluator.opponentOpenFour +
-      10 * evaluator.opponentOpenThree +
-      6 * evaluator.opponentFour +
+    let threat =  31 * evaluator.opponentOpenFour +
+      15 * evaluator.opponentOpenThree +
+      7 * evaluator.opponentFour +
       3 * evaluator.opponentThree +
       evaluator.opponentOpenTwo;
 
-    let offensiveRating = 5 * evaluator.ourOpenFour +  2 * evaluator.ourOpenThree + evaluator.ourFour;
+    let offensiveRating = 16 * evaluator.ourOpenFour +
+      8 * evaluator.ourOpenThree +
+      4 * evaluator.ourFour;
 
     if (threat != 0) {
       return -threat;
     } else {
-      return Math.random(10);
+      return offensiveRating;
     }
   }
 
