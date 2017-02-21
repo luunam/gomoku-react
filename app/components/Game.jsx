@@ -3,19 +3,26 @@ require('../../assets/styles/index.scss');
 import Board from './Board.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import GameStatus from './GameStatus.jsx';
 
 class Game extends React.Component{
 
   constructor(props) {
     super(props);
-    this.result = 'UNFINISHED';
+    this.gameStatus = new GameStatus();
+    this.result = this.gameStatus.UNFINISHED;
     this.thought = 'IDLE';
   }
 
   gameFinish(status) {
     this.result = status;
+
+    if (status == this.gameStatus.WIN) {
+      this.thought = "YOU'RE LUCKY";
+    } else if (status == this.gameStatus.LOSE) {
+      this.thought = "WOW, YOU'RE SO DUMB";
+    }
     this.setState({result: status});
-    console.log(status);
   }
 
   changeThought(thought) {
@@ -33,13 +40,16 @@ class Game extends React.Component{
         </div>
         <div className="panel">
           <div className="title">
-            GOMOKU v1.2
+            GOMOKU v1.3
             <a href="https://github.com/luunam/gomoku-react">
               <img src="images/github-icon/PNG/GitHub-Mark-64px.png"/>
             </a>
           </div>
           <div>
             Game state: {this.result}
+          </div>
+          <div>
+            Computer: {this.thought}
           </div>
         </div>
       </div>

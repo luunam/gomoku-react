@@ -15,7 +15,7 @@ class Bot {
     this.moveState = {
       'WIN': 1,
       'LOSE': 2,
-      'UNDECIDE': 3
+      'UNDECIDED': 3
     }
   }
 
@@ -185,7 +185,7 @@ class Bot {
     let evaluator = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluator);
 
-    let threat =  31 * evaluator.opponentOpenFour +
+    let defensiveRating =  31 * evaluator.opponentOpenFour +
       15 * evaluator.opponentOpenThree +
       7 * evaluator.opponentFour +
       3 * evaluator.opponentThree +
@@ -193,13 +193,10 @@ class Bot {
 
     let offensiveRating = 16 * evaluator.ourOpenFour +
       8 * evaluator.ourOpenThree +
-      4 * evaluator.ourFour;
+      4 * evaluator.ourFour -
+      2 * evaluator.opponentOpenTwo;
 
-    if (threat != 0) {
-      return -threat;
-    } else {
-      return offensiveRating;
-    }
+    return offensiveRating - defensiveRating;
   }
 
   checkMove(gameState) {

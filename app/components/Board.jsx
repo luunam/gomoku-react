@@ -4,6 +4,7 @@ import Square from './Square.jsx';
 import Bot from './bot/Bot.jsx';
 import BoardVisitor from './bot/BoardVisitor.jsx';
 import CheckGameStateVisitor from './bot/CheckGameStateVisitor.jsx';
+import GameStatus from './GameStatus.jsx';
 
 class Board extends React.Component {
   constructor(props) {
@@ -24,6 +25,18 @@ class Board extends React.Component {
 
     this.symbol = 'X';
     this.finish = false;
+
+    this.status = new GameStatus();
+  }
+
+  componentDidMount() {
+    this.setState({
+      turn: 'computer',
+      row: -1,
+      col: -1
+    });
+
+    window.requestAnimationFrame(() => this.update());
   }
 
   checkGameState() {
@@ -31,44 +44,51 @@ class Board extends React.Component {
     this.visitor.visitBoard(this, checkGameStateVisitor);
     if (checkGameStateVisitor.gameFinished) {
       if (checkGameStateVisitor.winner == this.symbol) {
-        this.props.gameFinish('YOU WIN');
+        this.props.gameFinish(this.status.WIN);
         this.finish = true;
       } else {
-        this.props.gameFinish("I WIN, YOU'RE SO DUMB");
+        this.props.gameFinish(this.status.LOSE);
         this.finish = true;
       }
     }
   }
 
-  sleep(milliseconds) {
-    let start = new Date().getTime();
-    for (let i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.state != null && this.state.turn == 'computer') {
-      let move = this.agent.calculateNextMove(this.state.row, this.state.col, this);
-
-      this.board[move.x][move.y] = move.symbol;
-      this.checkGameState();
-      this.props.changeThought('IDLE');
-      this.setState({turn: 'human'});
-    }
-  }
-
-  handleClick(row, col) {
-    // We only handle click if it is the right turn
-    if (!this.finish && this.playerTurn && this.board[row][col] == null) {
-      this.board[row][col] = this.symbol;
-      this.checkGameState();
-
+  onClick(row, col) {
+    if (!this.finish && this.state.turn == 'computer' && this.board[row][col] == null) {
       this.props.changeThought('I AM THINKING, STOP CLICKING');
-      this.setState({turn: 'computer', row: row, col: col});
+      this.setState({turn: 'human', row: row, col: col, symbol: 'X'});
     }
+  }
+
+  waitForBot() {
+    let move = this.agent.calculateNextMove(this.state.row, this.state.col, this);
+    console.log(move);
+    this.checkGameState();
+    this.props.changeThought('CHILLING RIGHT NOW');
+    this.setState({turn: 'computer', row: move.x, col: move.y, symbol: 'O'});
+
+    window.requestAnimationFrame(() => {this.update()});
+  }
+
+  update() {
+    let row = this.state.row;
+    let col = this.state.col;
+    let symbol = this.state.symbol;
+
+    if (row >= 0 && col >= 0) {
+      this.board[row][col] = symbol;
+      this.checkGameState();
+      this.forceUpdate();
+
+      if (this.state.turn == 'human') {
+        window.requestAnimationFrame(() => {this.waitForBot()});
+      } else {
+        window.requestAnimationFrame(() => {this.update();});
+      }
+    } else {
+      window.requestAnimationFrame(() => {this.update();});
+    }
+
   }
 
   renderRow(row) {
@@ -77,7 +97,7 @@ class Board extends React.Component {
       arr.push(
         <Square value={this.board[row][col]}
                 key={row * this.props.size + col}
-                onClick={() => this.handleClick(row, col)}/>
+                onClick={() => this.onClick(row, col)}/>
       );
     }
     return arr;
