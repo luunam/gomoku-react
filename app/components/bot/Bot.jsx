@@ -39,11 +39,6 @@ class Bot {
 
     let res = this.search(0, gameState, 0, -1000000, 1000000);
 
-    if (res == null) {
-      console.log('res is null');
-      console.log(this.boundary);
-      console.log(gameState);
-    }
     this.boundary = this.boundary.getNewBoundary(res.move.x, res.move.y);
     return res.move;
   }
@@ -60,10 +55,7 @@ class Bot {
   search(depth, gameState, noMinAgent, alpha, beta) {
     if (depth == this.depth) {
       let score = this.evaluate(gameState);
-      if (score == null) {
-        console.log('score is null');
-        console.log(gameState);
-      }
+
       gameState.score = score;
       return gameState;
     } else {
@@ -171,32 +163,28 @@ class Bot {
    */
   evaluate(gameState) {
     let visitor = new BoardVisitor();
-    let gameStateVisitor = new CheckGameStateVisitor();
-    visitor.visitBoard(gameState.board, gameStateVisitor);
-
-    if (gameStateVisitor.gameFinished) {
-      if (gameStateVisitor.winner == this.symbol) {
-        return 1000;
-      } else {
-        return -1000;
-      }
-    }
 
     let evaluator = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluator);
 
+    let initialScore = 0;
+    if (evaluator.opponentOpenThree > 2 ||
+      evaluator.opponentFour > 2 ||
+      evaluator.opponentOpenThree * evaluator.opponentFour > 0) {
+      initialScore = -1000;
+    }
+
     let defensiveRating =  31 * evaluator.opponentOpenFour +
       15 * evaluator.opponentOpenThree +
-      7 * evaluator.opponentFour +
+      13 * evaluator.opponentFour +
       3 * evaluator.opponentThree +
       evaluator.opponentOpenTwo;
 
-    let offensiveRating = 16 * evaluator.ourOpenFour +
-      8 * evaluator.ourOpenThree +
-      4 * evaluator.ourFour -
-      2 * evaluator.opponentOpenTwo;
+    let offensiveRating = 26 * evaluator.ourOpenFour +
+      16 * evaluator.ourOpenThree +
+      6 * evaluator.ourFour;
 
-    return offensiveRating - defensiveRating;
+    return offensiveRating - defensiveRating + initialScore;
   }
 
   checkMove(gameState) {

@@ -37,6 +37,7 @@ test('test bot board 7', () => {
     {x: 1, y: 3, symbol: 'O'},
     {x: 5, y: 3, symbol: 'O'}
   ];
+
   expect(possibleMoves).toContainEqual(ret);
 });
 
@@ -116,6 +117,23 @@ test('test bot board 12', () => {
   let possibleMoves = [
     {x: 1, y: 3, symbol: 'O'},
     {x: 6, y: 3, symbol: 'O'}
+  ];
+  expect(possibleMoves).toContainEqual(ret);
+});
+
+test('test bot board 13', () => {
+
+  let board = convertTxtToBoard('board13');
+  let bot = new Bot(1);
+
+  bot.boundary = new Boundary(4, 0, 4, 1);
+  let ret = bot.calculateNextMove(2, 2, board);
+
+  let possibleMoves = [
+    {x: 1, y: 1, symbol: 'O'},
+    {x: 4, y: 4, symbol: 'O'},
+    {x: 5, y: 5, symbol: 'O'},
+    {x: 6, y: 4, symbol: 'O'},
   ];
   expect(possibleMoves).toContainEqual(ret);
 });
