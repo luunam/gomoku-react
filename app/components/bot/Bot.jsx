@@ -1,9 +1,9 @@
 import deepcopy from 'deepcopy';
 import React from 'react';
 import Boundary from './Boundary.jsx';
-import BoardVisitor from './BoardVisitor.jsx';
-import CheckGameStateVisitor from './CheckGameStateVisitor.jsx';
-import EvaluateVisitor from './EvaluateVisitor.jsx';
+import BoardVisitor from '../visitor/BoardVisitor.jsx';
+import CheckGameStateVisitor from '../visitor/CheckGameStateVisitor.jsx';
+import EvaluateVisitor from '../visitor/EvaluateVisitor.jsx';
 import GameState from './GameState.jsx';
 
 class Bot {
@@ -82,18 +82,17 @@ class Bot {
     let ret = null;
 
     for (let i = 0; i < possibleMoves.length; i++) {
+
       let state = possibleMoves[i];
-      console.log(state.move);
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.WIN) {
-        state.score = 1000;
+        state.score = 2000;
         return state;
       }
 
       let newState = this.search(depth, state, 1, alpha, beta);
       state.score = newState.score;
-      console.log(state.score);
       if (newState.score != null && newState.score > v) {
         v = newState.score;
         ret = state;
@@ -132,7 +131,7 @@ class Bot {
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.LOSE) {
-        state.score = -1000;
+        state.score = -2000;
         return state;
       }
 
@@ -169,18 +168,21 @@ class Bot {
     let evaluator = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluator);
 
-    console.log(gameState.board.draw());
     let initialScore = 0;
     if (evaluator.opponentOpenThree >= 2 ||
         evaluator.opponentFour >= 2 ||
         evaluator.opponentOpenFour >= 1 ||
-        evaluator.opponentOpenThree * evaluator.opponentFour > 0) {
+        evaluator.opponentSeparateThree >= 2 ||
+        evaluator.opponentOpenThree * evaluator.opponentFour > 0 ||
+        evaluator.opponentSeparateThree * evaluator.opponentFour > 0 ||
+        evaluator.opponentSeparateThree * evaluator.opponentOpenThree > 0
+    ) {
       initialScore = -1000;
-      console.log(evaluator);
     }
 
     let defensiveRating =  31 * evaluator.opponentOpenFour +
       15 * evaluator.opponentOpenThree +
+      15 * evaluator.opponentSeparateThree +
       13 * evaluator.opponentFour +
       3 * evaluator.opponentThree +
       evaluator.opponentOpenTwo;
@@ -188,7 +190,8 @@ class Bot {
     let offensiveRating = 26 * evaluator.ourOpenFour +
       16 * evaluator.ourOpenThree +
       6 * evaluator.ourFour +
-      evaluator.ourOpenTwo;
+      evaluator.ourOpenTwo +
+      16 * evaluator.ourSeparateThree;
 
     return offensiveRating - defensiveRating + initialScore;
   }

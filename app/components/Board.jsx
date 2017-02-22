@@ -2,8 +2,8 @@ import deepcopy from 'deepcopy';
 import React from 'react';
 import Square from './Square.jsx';
 import Bot from './bot/Bot.jsx';
-import BoardVisitor from './bot/BoardVisitor.jsx';
-import CheckGameStateVisitor from './bot/CheckGameStateVisitor.jsx';
+import BoardVisitor from './visitor/BoardVisitor.jsx';
+import CheckGameStateVisitor from './visitor/CheckGameStateVisitor.jsx';
 import GameStatus from './GameStatus.jsx';
 
 class Board extends React.Component {
@@ -61,7 +61,6 @@ class Board extends React.Component {
 
   waitForBot() {
     let move = this.agent.calculateNextMove(this.state.row, this.state.col, this);
-    console.log(move);
     this.checkGameState();
     this.props.changeThought('CHILLING RIGHT NOW');
     this.setState({turn: 'computer', row: move.x, col: move.y, symbol: 'O'});

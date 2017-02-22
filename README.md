@@ -5,7 +5,6 @@ This is a gomoku game built with react and webpack. Play it here: https://luunam
 ## Rule
 The game objective is to get 5 in a row horizontally, diagonally or vertically before your opponent.
 
-
 ## Development
 Clone the directory and run `npm install`
 

@@ -1,6 +1,6 @@
 import convertTxtToBoard from '../utilities/convertTxtToBoard.jsx';
-import BoardVisitor from '../../app/components/bot/BoardVisitor.jsx';
-import CheckGameStateVisitor from '../../app/components/bot/CheckGameStateVisitor.jsx';
+import BoardVisitor from '../../app/components/visitor/BoardVisitor.jsx';
+import CheckGameStateVisitor from '../../app/components/visitor/CheckGameStateVisitor.jsx';
 
 test('check game gameState board 1', () => {
   let board = convertTxtToBoard('board1');

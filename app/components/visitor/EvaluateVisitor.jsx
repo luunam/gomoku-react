@@ -4,6 +4,12 @@ class EvaluateVisitor {
     this.currentCount = 0;
     this.oneEndOpening = false;
     this.lastSeenSymbol = 'OUT OF BOARD';
+
+    this.lastSeenSymbolNotNull = null;
+    this.blankCount = 0;
+    this.separateCount = 0;
+    this.farEndOpening = false;
+
     this.symbol = symbol;
 
     this.ourOpenThree = 0;
@@ -19,10 +25,45 @@ class EvaluateVisitor {
 
     this.ourOpenTwo = 0;
     this.opponentOpenTwo = 0;
+
+    this.ourSeparateThree = 0;
+    this.opponentSeparateThree = 0;
+
+    this.cumulation = '';
+
+    this.opponentSymbol = this.symbol == 'X' ? 'O' : 'X';
+
+    this.ourPattern1 = [' ', this.symbol, this.symbol, ' ', this.symbol, ' '].join('');
+    this.ourPattern2 = [' ', this.symbol, ' ',  this.symbol, this.symbol, ' '].join('');
+
+    this.opponentSeparatePattern1 = [' ', this.opponentSymbol, this.opponentSymbol, ' ', this.opponentSymbol, ' '].join('');
+    this.opponentSeparatePattern2 = [' ', this.opponentSymbol, ' ', this.opponentSymbol, this.opponentSymbol, ' '].join('');
+
   }
 
   visit(board, x, y) {
     let current = board.get(x, y);
+
+    if (current == null) {
+      this.cumulation += ' ';
+    } else {
+      this.cumulation += current;
+    }
+
+    if (this.cumulation.length > 6) {
+      this.cumulation.slice(1);
+    }
+
+
+    if (this.cumulation.length == 6) {
+      if (this.cumulation == this.ourPattern1 || this.cumulation == this.ourPattern2) {
+        this.ourSeparateThree++;
+      }
+      if (this.cumulation == this.opponentSeparatePattern1 || this.cumulation == this.opponentSeparatePattern2) {
+        this.opponentSeparateThree++;
+      }
+    }
+
     if (current == null) {
 
       if (this.oneEndOpening) {
@@ -85,6 +126,13 @@ class EvaluateVisitor {
     this.currentCount = 0;
     this.oneEndOpening = false;
     this.lastSeenSymbol = 'OUT OF BOARD';
+
+    this.lastSeenSymbolNotNull = null;
+    this.blankCount = 0;
+    this.separateCount = 0;
+    this.farEndOpening = false;
+
+    this.cumulation = [];
   }
 }
 

@@ -1,6 +1,6 @@
 import convertTxtToBoard from '../utilities/convertTxtToBoard.jsx';
-import BoardVisitor from '../../app/components/bot/BoardVisitor.jsx';
-import EvaluateVisitor from '../../app/components/bot/EvaluateVisitor.jsx';
+import BoardVisitor from '../../app/components/visitor/BoardVisitor.jsx';
+import EvaluateVisitor from '../../app/components/visitor/EvaluateVisitor.jsx';
 
 test('test evaluate visitor board 1', () => {
   let board1 = convertTxtToBoard('board1');
@@ -40,6 +40,7 @@ test('test evaluate visitor board 3', () => {
   expect(evaluator.opponentOpenThree).toBe(4);
   expect(evaluator.ourFour).toBe(0);
   expect(evaluator.ourOpenFour).toBe(1);
+  // expect(evaluator.opponentSeparateThree).toBe(1);
 });
 
 test('test evaluate visitor board 5', () => {
@@ -87,4 +88,19 @@ test('test evaluate visitor board 10', () => {
 
   expect(evaluator.ourThree).toBe(1);
   expect(evaluator.opponentOpenFour).toBe(1);
+});
+
+
+test('test evaluate visitor board 16', () => {
+  let board = convertTxtToBoard('board16');
+
+  let evaluator = new EvaluateVisitor('X');
+  let visitor = new BoardVisitor();
+  board.set(1, 6, 'X');
+  board.set(2, 1, 'O');
+  board.set(3, 4, 'X');
+  visitor.visitBoard(board, evaluator);
+
+  expect(evaluator.ourSeparateThree).toBe(1);
+  expect(evaluator.ourOpenThree).toBe(1);
 });
