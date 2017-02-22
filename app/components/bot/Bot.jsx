@@ -83,6 +83,7 @@ class Bot {
 
     for (let i = 0; i < possibleMoves.length; i++) {
       let state = possibleMoves[i];
+      console.log(state.move);
       let analyzeMove = this.checkMove(state);
 
       if (analyzeMove == this.moveState.WIN) {
@@ -92,6 +93,7 @@ class Bot {
 
       let newState = this.search(depth, state, 1, alpha, beta);
       state.score = newState.score;
+      console.log(state.score);
       if (newState.score != null && newState.score > v) {
         v = newState.score;
         ret = state;
@@ -167,11 +169,14 @@ class Bot {
     let evaluator = new EvaluateVisitor(this.symbol);
     visitor.visitBoard(gameState.board, evaluator);
 
+    console.log(gameState.board.draw());
     let initialScore = 0;
-    if (evaluator.opponentOpenThree > 2 ||
-      evaluator.opponentFour > 2 ||
-      evaluator.opponentOpenThree * evaluator.opponentFour > 0) {
+    if (evaluator.opponentOpenThree >= 2 ||
+        evaluator.opponentFour >= 2 ||
+        evaluator.opponentOpenFour >= 1 ||
+        evaluator.opponentOpenThree * evaluator.opponentFour > 0) {
       initialScore = -1000;
+      console.log(evaluator);
     }
 
     let defensiveRating =  31 * evaluator.opponentOpenFour +
@@ -182,7 +187,8 @@ class Bot {
 
     let offensiveRating = 26 * evaluator.ourOpenFour +
       16 * evaluator.ourOpenThree +
-      6 * evaluator.ourFour;
+      6 * evaluator.ourFour +
+      evaluator.ourOpenTwo;
 
     return offensiveRating - defensiveRating + initialScore;
   }

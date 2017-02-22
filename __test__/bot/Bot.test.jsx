@@ -137,3 +137,20 @@ test('test bot board 13', () => {
   ];
   expect(possibleMoves).toContainEqual(ret);
 });
+
+test('test bot board 14', () => {
+
+  let board = convertTxtToBoard('board14');
+  let bot = new Bot(1);
+
+  bot.boundary = new Boundary(4, 2, 3, 1);
+  let ret = bot.calculateNextMove(2, 1, board);
+
+  console.log(ret);
+  console.log(board.draw());
+  let possibleMoves = [
+    {x: 1, y: 1, symbol: 'O'},
+    {x: 5, y: 1, symbol: 'O'}
+  ];
+  expect(possibleMoves).toContainEqual(ret);
+});

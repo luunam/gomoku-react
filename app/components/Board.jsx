@@ -11,7 +11,6 @@ class Board extends React.Component {
     super(props);
 
     this.board = new Array(props.size);
-    this.playerTurn = true;
 
     // initialize board
     for (let i = 0; i < props.size; i++) {
@@ -91,11 +90,21 @@ class Board extends React.Component {
 
   }
 
+  getBackground(row, col) {
+    if (this.state != null && row == this.state.row && col == this.state.col) {
+      return 'antiquewhite';
+    } else {
+      return 'white';
+    }
+  }
+
   renderRow(row) {
     let arr = [];
     for (let col = 0; col < this.props.size; col++) {
       arr.push(
-        <Square value={this.board[row][col]}
+        <Square
+                backgroundColor={this.getBackground(row, col)}
+                value={this.board[row][col]}
                 key={row * this.props.size + col}
                 onClick={() => this.onClick(row, col)}/>
       );
