@@ -1,9 +1,9 @@
 import deepcopy from 'deepcopy';
 import React from 'react';
 import Square from './Square.jsx';
-import Bot from './bot/Bot.jsx';
-import BoardVisitor from './visitor/BoardVisitor.jsx';
-import CheckGameStateVisitor from './visitor/CheckGameStateVisitor.jsx';
+import Bot from '../bot/Bot.jsx';
+import BoardVisitor from '../visitor/BoardVisitor.jsx';
+import CheckGameStateVisitor from '../visitor/CheckGameStateVisitor.jsx';
 import GameStatus from './GameStatus.jsx';
 
 class Board extends React.Component {
@@ -40,7 +40,7 @@ class Board extends React.Component {
 
   checkGameState() {
     let checkGameStateVisitor = new CheckGameStateVisitor();
-    this.visitor.visitBoard(this, checkGameStateVisitor);
+    this.visitor.accept(this, checkGameStateVisitor);
     if (checkGameStateVisitor.gameFinished) {
       if (checkGameStateVisitor.winner == this.symbol) {
         this.props.gameFinish(this.status.WIN);

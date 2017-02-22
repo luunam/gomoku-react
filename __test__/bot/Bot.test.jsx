@@ -1,6 +1,6 @@
 import convertTxtToBoard from '../utilities/convertTxtToBoard.jsx';
-import Bot from '../../app/components/bot/Bot.jsx';
-import Boundary from '../../app/components/bot/Boundary.jsx';
+import Bot from '../../app/bot/Bot.jsx';
+import Boundary from '../../app/bot/Boundary.jsx';
 
 test('test bot board 5', () => {
   let board = convertTxtToBoard('board5');

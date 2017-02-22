@@ -1,3 +1,5 @@
+import format from 'string-format'
+
 class EvaluateVisitor {
 
   constructor(symbol) {
@@ -33,12 +35,11 @@ class EvaluateVisitor {
 
     this.opponentSymbol = this.symbol == 'X' ? 'O' : 'X';
 
-    this.ourPattern1 = [' ', this.symbol, this.symbol, ' ', this.symbol, ' '].join('');
-    this.ourPattern2 = [' ', this.symbol, ' ',  this.symbol, this.symbol, ' '].join('');
+    this.ourPattern1 = format(' {0}{0} {0} ', this.symbol);
+    this.ourPattern2 = format(' {0} {0}{0} ', this.symbol);
 
-    this.opponentSeparatePattern1 = [' ', this.opponentSymbol, this.opponentSymbol, ' ', this.opponentSymbol, ' '].join('');
-    this.opponentSeparatePattern2 = [' ', this.opponentSymbol, ' ', this.opponentSymbol, this.opponentSymbol, ' '].join('');
-
+    this.opponentSeparatePattern1 = format(' {0}{0} {0} ', this.opponentSymbol);
+    this.opponentSeparatePattern2 = format(' {0} {0}{0} ', this.opponentSymbol);
   }
 
   visit(board, x, y) {

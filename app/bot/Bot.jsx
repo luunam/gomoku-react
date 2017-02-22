@@ -166,7 +166,7 @@ class Bot {
     let visitor = new BoardVisitor();
 
     let evaluator = new EvaluateVisitor(this.symbol);
-    visitor.visitBoard(gameState.board, evaluator);
+    visitor.accept(gameState.board, evaluator);
 
     let initialScore = 0;
     if (evaluator.opponentOpenThree >= 2 ||
@@ -199,7 +199,7 @@ class Bot {
   checkMove(gameState) {
     let visitor = new BoardVisitor();
     let gameStateVisitor = new CheckGameStateVisitor();
-    visitor.visitBoard(gameState.board, gameStateVisitor);
+    visitor.accept(gameState.board, gameStateVisitor);
 
     if (gameStateVisitor.gameFinished) {
       if (gameStateVisitor.winner == this.symbol) {

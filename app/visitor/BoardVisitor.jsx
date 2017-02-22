@@ -3,7 +3,7 @@ import EvaluateVisitor from './EvaluateVisitor.jsx';
 
 class BoardVisitor {
 
-  visitBoard(board, cellVisitor) {
+  accept(board, cellVisitor) {
     this.traverseColumn(board, cellVisitor);
     cellVisitor.reset();
     this.traverseRow(board, cellVisitor);
