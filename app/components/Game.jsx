@@ -42,7 +42,7 @@ class Game extends React.Component{
           <div className="title">
             GOMOKU v1.6
             <a href="https://github.com/luunam/gomoku-react">
-              <img src="images/github-icon/PNG/GitHub-Mark-64px.png"/>
+              <img src="images/github-icon/PNG/GitHub-Mark-Light-64px.png"/>
             </a>
           </div>
           <div>
