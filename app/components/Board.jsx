@@ -20,8 +20,6 @@ class Board extends React.Component {
     this.size = props.size;
     this.props = props;
 
-    this.visitor = new BoardVisitor();
-
     this.symbol = 'X';
     this.finish = false;
 
@@ -40,7 +38,7 @@ class Board extends React.Component {
 
   checkGameState() {
     let checkGameStateVisitor = new CheckGameStateVisitor();
-    this.visitor.accept(this, checkGameStateVisitor);
+    BoardVisitor.accept(this, checkGameStateVisitor);
     if (checkGameStateVisitor.gameFinished) {
       if (checkGameStateVisitor.winner == this.symbol) {
         this.props.gameFinish(this.status.WIN);
@@ -97,12 +95,21 @@ class Board extends React.Component {
     }
   }
 
+  getOpacity(row, col) {
+    if (this.state != null && row == this.state.row && col == this.state.col) {
+      return 0.5;
+    } else {
+      return 1;
+    }
+  }
+
   renderRow(row) {
     let arr = [];
     for (let col = 0; col < this.props.size; col++) {
       arr.push(
         <Square
           backgroundColor={this.getBackground(row, col)}
+          opacity={this.getOpacity(row, col)}
           value={this.board[row][col]}
           key={row * this.props.size + col}
           onClick={() => this.onClick(row, col)}/>

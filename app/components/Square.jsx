@@ -14,7 +14,7 @@ class Square extends React.Component {
       <button className="square"
               onClick={() => this.props.onClick()}
               style={{color: this.getColor(this.props.value),
-                background: this.props.backgroundColor
+                opacity: this.props.opacity
               }}>
         {this.props.value}
       </button>

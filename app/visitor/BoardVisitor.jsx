@@ -3,18 +3,18 @@ import EvaluateVisitor from './EvaluateVisitor.jsx';
 
 class BoardVisitor {
 
-  accept(board, cellVisitor) {
-    this.traverseColumn(board, cellVisitor);
+  static accept(board, cellVisitor) {
+    BoardVisitor.traverseColumn(board, cellVisitor);
     cellVisitor.reset();
-    this.traverseRow(board, cellVisitor);
+    BoardVisitor.traverseRow(board, cellVisitor);
     cellVisitor.reset();
-    this.traverseMainDiagonal(board, cellVisitor);
+    BoardVisitor.traverseMainDiagonal(board, cellVisitor);
     cellVisitor.reset();
-    this.traverseAuxilaryDiagonal(board, cellVisitor);
+    BoardVisitor.traverseAuxilaryDiagonal(board, cellVisitor);
     cellVisitor.reset();
   }
 
-  traverseAuxilaryDiagonal(board, cellVisitor) {
+  static traverseAuxilaryDiagonal(board, cellVisitor) {
     for (let sum = 0; sum <= 2*(board.size-1); sum++) {
       let xMax = Math.min(sum, board.size-1);
       let xMin = Math.max(0, sum - board.size + 1);
@@ -28,7 +28,7 @@ class BoardVisitor {
     }
   }
 
-  traverseColumn(board, cellVisitor) {
+  static traverseColumn(board, cellVisitor) {
     for (let rowIdx = 0; rowIdx < board.size; rowIdx++) {
       for (let colIdx = 0; colIdx < board.size; colIdx++) {
         if (cellVisitor.visit(board, rowIdx, colIdx)) {
@@ -39,7 +39,7 @@ class BoardVisitor {
     }
   }
 
-  traverseRow(board, cellVisitor) {
+  static traverseRow(board, cellVisitor) {
     for (let colIdx = 0; colIdx < board.size; colIdx++) {
       for (let rowIdx = 0; rowIdx < board.size; rowIdx++) {
         if (cellVisitor.visit(board, rowIdx, colIdx)) {
@@ -50,7 +50,7 @@ class BoardVisitor {
     }
   }
 
-  traverseMainDiagonal(board, cellVisitor) {
+  static traverseMainDiagonal(board, cellVisitor) {
     for (let diff = -(board.size - 1); diff <= board.size - 1; diff++) {
       let xMax = Math.min(board.size-1, board.size + diff - 1);
       let xMin = Math.max(0, diff);
