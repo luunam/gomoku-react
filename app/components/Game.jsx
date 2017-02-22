@@ -46,6 +46,9 @@ class Game extends React.Component{
             </a>
           </div>
           <div>
+            Get 5 in a row first to beat your computer
+          </div>
+          <div>
             Game state: {this.result}
           </div>
           <div>

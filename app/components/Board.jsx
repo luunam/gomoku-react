@@ -103,10 +103,10 @@ class Board extends React.Component {
     for (let col = 0; col < this.props.size; col++) {
       arr.push(
         <Square
-                backgroundColor={this.getBackground(row, col)}
-                value={this.board[row][col]}
-                key={row * this.props.size + col}
-                onClick={() => this.onClick(row, col)}/>
+          backgroundColor={this.getBackground(row, col)}
+          value={this.board[row][col]}
+          key={row * this.props.size + col}
+          onClick={() => this.onClick(row, col)}/>
       );
     }
     return arr;

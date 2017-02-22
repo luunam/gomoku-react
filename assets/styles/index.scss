@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Euphoria+Script');
 $grid-size: 45px;
 
 #test {
   color: red;
+}
+
+body {
+  background: aliceblue;
 }
 
 .square {
@@ -11,7 +17,7 @@ $grid-size: 45px;
   margin-right: -1px;
 
   border: 1px solid #000000;
-  font-size: 24px;
+  font-size: 0.5 * $grid-size;
   font-weight: bold;
   line-height: $grid-size;
   float: left;
@@ -41,11 +47,11 @@ $grid-size: 45px;
 .panel {
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
-  font-family: 'Lato';
+  margin-left: 25px;
+  font-family: 'Lato', sans-serif;
 
   .title {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   img {
