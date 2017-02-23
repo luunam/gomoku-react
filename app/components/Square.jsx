@@ -3,9 +3,11 @@ import React from 'react';
 class Square extends React.Component {
   getColor(val) {
     if (val == 'X') {
-      return 'blue';
+      return 'white';
     } else if (val == 'O') {
-      return 'red';
+      return '#474747';
+    } else {
+      return 'none';
     }
   }
 
@@ -13,10 +15,12 @@ class Square extends React.Component {
     return (
       <button className="square"
               onClick={() => this.props.onClick()}
-              style={{color: this.getColor(this.props.value),
+              style={{padding: '0px',
                 opacity: this.props.opacity
               }}>
-        {this.props.value}
+        <svg height="40" width="40">
+          <circle cx='20' cy='20' r='8' fill={this.getColor(this.props.value)} />
+        </svg>
       </button>
     );
   }

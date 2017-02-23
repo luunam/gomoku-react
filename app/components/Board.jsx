@@ -97,7 +97,7 @@ class Board extends React.Component {
 
   getOpacity(row, col) {
     if (this.state != null && row == this.state.row && col == this.state.col) {
-      return 0.5;
+      return 0.85;
     } else {
       return 1;
     }

@@ -46,7 +46,7 @@ class Game extends React.Component{
             </a>
           </div>
           <div>
-            Get 5 in a row first to beat your computer
+            Get 5 in a row first to beat your computer. Click anywhere on the board to begin.
           </div>
           <div>
             Game state: {this.result}
