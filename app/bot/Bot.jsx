@@ -5,6 +5,7 @@ import BoardVisitor from '../visitor/BoardVisitor.jsx';
 import CheckGameStateVisitor from '../visitor/CheckGameStateVisitor.jsx';
 import EvaluateVisitor from '../visitor/EvaluateVisitor.jsx';
 import GameState from './GameState.jsx';
+import PatternManager from './PatternManager.jsx';
 
 class Bot {
   constructor(depth) {
@@ -16,7 +17,9 @@ class Bot {
       'WIN': 1,
       'LOSE': 2,
       'UNDECIDED': 3
-    }
+    };
+
+    this.patternManager = new PatternManager(this.symbol);
   }
 
   /**
