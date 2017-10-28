@@ -18,9 +18,9 @@ class Game extends React.Component{
     this.result = status;
 
     if (status == this.gameStatus.WIN) {
-      this.thought = "YOU'RE LUCKY";
+      this.thought = "YOU WIN";
     } else if (status == this.gameStatus.LOSE) {
-      this.thought = "WOW, YOU'RE SO DUMB";
+      this.thought = "I LOSE";
     }
     this.setState({result: status});
   }
